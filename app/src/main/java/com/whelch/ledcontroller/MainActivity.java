@@ -1,170 +1,191 @@
 package com.whelch.ledcontroller;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+public class MainActivity extends Activity implements BluetoothLeUart.Callback {
 
-public class MainActivity extends AppCompatActivity {
-	private static final int LOCATION_PERMISION_CODE = 1;
-	
-	private static final String BED_DEVICE_NAME = "Bed Controller";
+    // UI elements
+    private TextView messages;
+    private EditText input;
+    private Button   send;
+    private CheckBox newline;
 
-	private BluetoothAdapter btAdapter;
-	private BluetoothScanCallback scanCallback;
-	private BluetoothLeScanner btLeScanner;
-	private Handler handler = new Handler();
-	private BluetoothDevice bedController;
+    // Bluetooth LE UART instance.  This is defined in BluetoothLeUart.java.
+    private BluetoothLeUart uart;
 
-	private static final long SCAN_DURATION = 5000;
+    // Write some text to the messages text view.
+    // Care is taken to do this on the main UI thread so writeLine can be called from any thread
+    // (like the BTLE callback).
+    private void writeLine(final CharSequence text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messages.append(text);
+                messages.append("\n");
+            }
+        });
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-			finish();
-		}
-	}
+    // Handler for mouse click on the send button.
+    public void sendClick(View view) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String message = input.getText().toString();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
-		BluetoothManager btManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-		btAdapter = btManager.getAdapter();
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			requestLocationPermission();
-		} else {
-			startScan();
-		}
-	}
-	
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		switch(requestCode) {
-			case LOCATION_PERMISION_CODE:
-				if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					Log.d("PERMISSION_RESULT", "Fine location permission granted");
-					startScan();
-				}
-		}
-	}
+        // We can only send 20 bytes per packet, so break longer messages
+        // up into 20 byte payloads
+        int len = message.length();
+        int pos = 0;
+        while(len != 0) {
+            stringBuilder.setLength(0);
+            if (len>=20) {
+                stringBuilder.append(message.toCharArray(), pos, 20 );
+                len-=20;
+                pos+=20;
+            }
+            else {
+                stringBuilder.append(message.toCharArray(), pos, len);
+                len = 0;
+            }
+            uart.send(stringBuilder.toString());
+        }
+        // Terminate with a newline character if requests
+        newline = (CheckBox) findViewById(R.id.newline);
+        if (newline.isChecked()) {
+            stringBuilder.setLength(0);
+            stringBuilder.append("\n");
+            uart.send(stringBuilder.toString());
+        }
+    }
 
-	private void startScan() {
-		if(!hasPermissions()) {
-			return;
-		}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		List<ScanFilter> filters = new ArrayList<>();
-		ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
+        // Grab references to UI elements.
+        messages = (TextView) findViewById(R.id.messages);
+        input = (EditText) findViewById(R.id.input);
 
-		scanCallback = new BluetoothScanCallback();
-		btLeScanner = btAdapter.getBluetoothLeScanner();
-		btLeScanner.startScan(filters, settings, scanCallback);
+        // Initialize UART.
+        uart = new BluetoothLeUart(getApplicationContext());
 
-		handler.postDelayed(this::stopScan, SCAN_DURATION);
-	}
+        // Disable the send button until we're connected.
+        send = (Button)findViewById(R.id.send);
+        send.setClickable(false);
+        send.setEnabled(false);
 
-	private void stopScan() {
-		btLeScanner.stopScan(scanCallback);
-		connectToController();
-	}
-	
-	private void connectToController() {
-		if(bedController != null) {
-			bedController.connectGatt(this, true, new BedGattCallback());
-		}
-	}
+        // Enable auto-scroll in the TextView
+        messages.setMovementMethod(new ScrollingMovementMethod());
+    }
 
-	private boolean hasPermissions() {
-		if (!btAdapter.isEnabled()) {
-			requestBluetoothEnable();
-			return false;
-		}
-		return true;
-	}
-	
-	@TargetApi(24)
-	private void requestLocationPermission() {
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("This app needs location access");
-			builder.setMessage("Please grant location access so this app can scan for bluetooth devices.");
-			builder.setPositiveButton(android.R.string.ok, null);
-			builder.setOnDismissListener(dialog ->
-					requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISION_CODE)
-			);
-			builder.show();
-		} else {
-			startScan();
-		}
-	}
+    // OnCreate, called once to initialize the activity.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	private void requestBluetoothEnable() {
-		Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivityForResult(enableBluetoothIntent, 2);
-	}
-	
-	private class BedGattCallback extends BluetoothGattCallback {
-		@Override
-		public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-			Log.d("GATT_CALLBACK", ""+status);
-			gatt.discoverServices();
-		}
-		@Override
-		public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-			Log.d("GATT_CALLBACK", ""+status);
-		}
-	}
+    // OnResume, called right before UI is displayed.  Connect to the bluetooth device.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        writeLine("Scanning for devices ...");
+        uart.registerCallback(this);
+        uart.connectFirstAvailable();
+    }
 
-	private class BluetoothScanCallback extends ScanCallback {
-		@Override
-		public void onScanResult(int callbackType, ScanResult result) {
-			String deviceName = result.getScanRecord().getDeviceName();
-			if (deviceName != null && deviceName.equals(BED_DEVICE_NAME)) {
-				setBedController(result);
-			}
-		}
+    // OnStop, called right before the activity loses foreground focus.  Close the BTLE connection.
+    @Override
+    protected void onStop() {
+        super.onStop();
+        uart.unregisterCallback(this);
+        uart.disconnect();
+    }
 
-		@Override
-		public void onBatchScanResults(List<ScanResult> results) {
-			for(ScanResult result: results) {
-				String deviceName = result.getScanRecord().getDeviceName();
-				if (deviceName != null && deviceName.equals(BED_DEVICE_NAME)) {
-					setBedController(result);
-				}
-			}
-		}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-		@Override public void onScanFailed(int errorCode) {
-			Log.e("BLE_SCAN", "BLE Scan failed with code" + errorCode);
-		}
+    // UART Callback event handlers.
+    @Override
+    public void onConnected(BluetoothLeUart uart) {
+        // Called when UART device is connected and ready to send/receive data.
+        writeLine("Connected!");
+        // Enable the send button
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                send = (Button)findViewById(R.id.send);
+                send.setClickable(true);
+                send.setEnabled(true);
+            }
+        });
+    }
 
-		private void setBedController(ScanResult result) {
-			bedController = result.getDevice();
-		}
-	}
+    @Override
+    public void onConnectFailed(BluetoothLeUart uart) {
+        // Called when some error occured which prevented UART connection from completing.
+        writeLine("Error connecting to device!");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                send = (Button)findViewById(R.id.send);
+                send.setClickable(false);
+                send.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onDisconnected(BluetoothLeUart uart) {
+        // Called when the UART device disconnected.
+        writeLine("Disconnected!");
+        // Disable the send button.
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                send = (Button)findViewById(R.id.send);
+                send.setClickable(false);
+                send.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onReceive(BluetoothLeUart uart, BluetoothGattCharacteristic rx) {
+        // Called when data is received by the UART.
+        writeLine("Received: " + rx.getStringValue(0));
+    }
+
+    @Override
+    public void onDeviceFound(BluetoothDevice device) {
+        // Called when a UART device is discovered (after calling startScan).
+        writeLine("Found device : " + device.getAddress());
+        writeLine("Waiting for a connection ...");
+    }
+
+    @Override
+    public void onDeviceInfoAvailable() {
+        writeLine(uart.getDeviceInfo());
+    }
 }

@@ -17,6 +17,22 @@
 		android:text="Send"
 		android:onClick="sendClick"/>
 
+	<Button
+		android:id="@+id/all_on"
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:layout_alignParentStart="true"
+		android:layout_below="@+id/input"
+		android:text="On"/>
+
+	<Button
+		android:id="@+id/all_off"
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_below="@+id/input"
+		android:text="Off"/>
+
 	<EditText
 		android:id="@+id/input"
 		android:layout_width="wrap_content"
@@ -25,26 +41,11 @@
 		android:layout_alignParentTop="true"
 		android:layout_alignParentLeft="true"/>
 
-	<TextView
-		android:id="@+id/messages"
-		android:layout_width="match_parent"
+	<Button
+		android:id="@+id/reset"
+		android:layout_width="100dp"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/send"
-		android:layout_above="@+id/newline"
-		android:fontFamily="monospace"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:scrollbars="vertical"
-		android:scrollbarAlwaysDrawVerticalTrack="true"
-		android:gravity="bottom"/>
-
-	<CheckBox
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Insert NewLine on Send"
-		android:id="@+id/newline"
 		android:layout_alignParentBottom="true"
-		android:layout_alignParentStart="true"
-		android:layout_alignEnd="@+id/scrollView" />
+		android:text="Reset"/>
 
 </RelativeLayout>

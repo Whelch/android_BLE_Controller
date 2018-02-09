@@ -60,12 +60,12 @@ public class MainActivity extends Activity implements BluetoothLeUart.Callback {
             uart.send(stringBuilder.toString());
         }
         // Terminate with a newline character if requests
-        newline = (CheckBox) findViewById(R.id.newline);
-        if (newline.isChecked()) {
-            stringBuilder.setLength(0);
-            stringBuilder.append("\n");
-            uart.send(stringBuilder.toString());
-        }
+//        newline = (CheckBox) findViewById(R.id.newline);
+//        if (newline.isChecked()) {
+//            stringBuilder.setLength(0);
+//            stringBuilder.append("\n");
+//            uart.send(stringBuilder.toString());
+//        }
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements BluetoothLeUart.Callback {
         setContentView(R.layout.activity_main);
 
         // Grab references to UI elements.
-        messages = (TextView) findViewById(R.id.messages);
+//        messages = (TextView) findViewById(R.id.messages);
         input = (EditText) findViewById(R.id.input);
 
         // Initialize UART.

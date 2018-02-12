@@ -1,48 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Rainbow" />
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorPrimary"
+	android:weightSum="4"
+	android:padding="10dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Repeat" />
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
 
-    <SeekBar
-        android:id="@+id/seekBar2"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="5"
-        android:progress="1" />
+		<Switch
+			android:id="@+id/rainbowSwitch"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Rainbow   "
+			android:layout_gravity="center"
+			android:textSize="25sp"/>
+	</LinearLayout>
 
-    <Switch
-        android:id="@+id/switch2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Flow" />
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Duration" />
+		<TextView
+			android:id="@+id/repeatText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Repeat"/>
 
-    <SeekBar
-        android:id="@+id/seekBar4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+		<SeekBar
+			android:id="@+id/rainbowRepeatSeekbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			style="@style/Widget.AppCompat.SeekBar.Discrete"
+			android:tickMark="@drawable/tickmark"
+			android:max="5"
+			android:progress="1"/>
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update" />
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_height="wrap_content"
+			android:weightSum="5">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text=".5"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="1"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="2"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="3"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="4"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="5"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<Switch
+			android:id="@+id/rainbowFlowSwitch"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Flow" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<TextView
+			android:id="@+id/rainbowDurationText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Duration" />
+
+		<SeekBar
+			android:id="@+id/rainbowDurationSeekBar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_height="wrap_content"
+			android:weightSum="1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="1s"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="10s"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/rainbowSendButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Send"/>
 
 </LinearLayout>

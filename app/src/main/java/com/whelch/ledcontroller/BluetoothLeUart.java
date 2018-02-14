@@ -109,7 +109,7 @@ public class BluetoothLeUart extends BluetoothGattCallback implements BluetoothA
 
     // Send data to connected UART device.
     public void send(byte[] data) {
-        if (tx == null || data == null || data.length == 0) {
+        if (tx == null || data == null || data.length == 0 || writeInProgress) {
             // Do nothing if there is no connection or message to send.
             return;
         }
@@ -117,8 +117,6 @@ public class BluetoothLeUart extends BluetoothGattCallback implements BluetoothA
         tx.setValue(data);
         writeInProgress = true; // Set the write in progress flag
         gatt.writeCharacteristic(tx);
-        // ToDo: Update to include a timeout in case this goes into the weeds
-        while (writeInProgress); // Wait for the flag to clear in onCharacteristicWrite
     }
 
     // Send data to connected UART device.

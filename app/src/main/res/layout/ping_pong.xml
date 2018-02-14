@@ -6,14 +6,13 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/colorPrimary"
-	android:weightSum="5"
 	android:padding="10dp">
 
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1">
+		android:layout_marginBottom="10dp">
 
 		<Switch
 			android:id="@+id/pingPongSwitch"
@@ -24,159 +23,171 @@
 			android:textSize="25sp"/>
 	</LinearLayout>
 
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1">
-
-		<TextView
-			android:id="@+id/pingPongSpreadText"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="Spread"/>
-
-		<SeekBar
-			android:id="@+id/repeatSeekbar"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			style="@style/Widget.AppCompat.SeekBar.Discrete"
-			android:tickMark="@drawable/tickmark"
-			android:max="7"
-			android:progress="5"/>
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:layout_height="wrap_content"
-			android:weightSum="7">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="1"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="2"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="3"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="4"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="5"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="6"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="7"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="8"/>
-		</LinearLayout>
-	</LinearLayout>
-
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1">
-
-		<TextView
-			android:id="@+id/pingPongDurationText"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="Duration" />
-
-		<SeekBar
-			android:id="@+id/pingPongDurationSeekBar"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content" />
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:layout_height="wrap_content"
-			android:weightSum="1">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="1s"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="100s"/>
-		</LinearLayout>
-	</LinearLayout>
-
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1">
-
-		<Switch
-			android:id="@+id/pingPongDarkSwitch"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="Dark" />
-
-	</LinearLayout>
 
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
 		android:layout_weight="1">
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Spread"/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_weight="1">
+
+			<SeekBar
+				android:id="@+id/pingPongSpreadSeekbar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@style/Widget.AppCompat.SeekBar.Discrete"
+				android:tickMark="@drawable/tickmark"
+				android:max="7"
+				android:progress="5"/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:layout_height="wrap_content"
+				android:weightSum="7">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="1"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="2"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="3"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="4"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="5"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="6"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="7"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="8"/>
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
+		android:layout_weight="1">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Duration" />
+
+		<NumberPicker
+			android:id="@+id/pingPongDurationPicker"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
+		android:layout_weight="1">
+
+		<Switch
+			android:id="@+id/pingPongDarkSwitch"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Dark    " />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
+		android:layout_weight="1">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
 			android:text="Easing"/>
 
 		<Spinner
 			android:id="@+id/pingPongEasingSpinner"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content" />
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/colorPrimaryDark"
+			android:padding="10dp"
+			android:layout_marginStart="10dp"
+			android:layout_gravity="center" />
 	</LinearLayout>
 
 	<Button
 		android:id="@+id/pingPongSendButton"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_gravity="center"
+		android:paddingTop="20dp"
+		android:paddingBottom="20dp"
+		android:paddingStart="50dp"
+		android:paddingEnd="50dp"
 		android:text="Send"/>
 
 </LinearLayout>

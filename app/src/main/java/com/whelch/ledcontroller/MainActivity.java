@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity implements BluetoothLeUart.Ca
 	/**
 	 * Sends a command to the bluetooth device, if it's connected.
 	 */
-	public void sendCommand(String command) {
+	public void sendCommand(byte[] command) {
     	if(uart != null) {
     		uart.send(command);
 		}

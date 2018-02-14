@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -18,35 +17,44 @@ import com.whelch.ledcontroller.Easing;
 import com.whelch.ledcontroller.MainActivity;
 import com.whelch.ledcontroller.R;
 
-public class PingPongFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnTouchListener, NumberPicker.OnValueChangeListener, SeekBar.OnSeekBarChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class BreathingFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnTouchListener, NumberPicker.OnValueChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 	
-	private SeekBar spreadSeekBar;
+	private NumberPicker minIntensityPicker;
+	private NumberPicker maxIntensityPicker;
 	private NumberPicker durationPicker;
-	private Switch darkSwitch;
 	private Spinner easingSpinner;
 	
 	private boolean active = false;
-	private byte spread = 4;
+	private byte minIntensity = 0;
+	private byte maxIntensity = (byte)255;
 	private byte duration = 5;
-	private boolean dark = false;
 	private byte easing = 0;
 	
 	private MainActivity activity;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
-		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.ping_pong, container, false);
+		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.breathing, container, false);
 		activity = (MainActivity) getActivity();
 		
-		((Switch)rootView.findViewById(R.id.pingPongSwitch)).setOnCheckedChangeListener(this);
-		rootView.findViewById(R.id.pingPongSendButton).setOnClickListener(this);
+		((Switch)rootView.findViewById(R.id.breathingSwitch)).setOnCheckedChangeListener(this);
+		rootView.findViewById(R.id.breathingSendButton).setOnClickListener(this);
 		
-		spreadSeekBar = ((SeekBar)rootView.findViewById(R.id.pingPongSpreadSeekbar));
-		spreadSeekBar.setProgress(spread);
-		spreadSeekBar.setOnSeekBarChangeListener(this);
-		spreadSeekBar.setOnTouchListener(this);
+		minIntensityPicker = (NumberPicker) rootView.findViewById(R.id.breathingMinIntensityPicker);
+		minIntensityPicker.setMinValue(0);
+		minIntensityPicker.setMaxValue(255);
+		minIntensityPicker.setValue(minIntensity);
+		minIntensityPicker.setOnValueChangedListener(this);
+		minIntensityPicker.setOnTouchListener(this);
 		
-		durationPicker = (NumberPicker) rootView.findViewById(R.id.pingPongDurationPicker);
+		maxIntensityPicker = (NumberPicker) rootView.findViewById(R.id.breathingMaxIntensityPicker);
+		maxIntensityPicker.setMinValue(0);
+		maxIntensityPicker.setMaxValue(255);
+		maxIntensityPicker.setValue(maxIntensity);
+		maxIntensityPicker.setOnValueChangedListener(this);
+		maxIntensityPicker.setOnTouchListener(this);
+		
+		durationPicker = (NumberPicker) rootView.findViewById(R.id.breathingDurationPicker);
 		durationPicker.setFormatter(value -> value + "s");
 		durationPicker.setMinValue(1);
 		durationPicker.setMaxValue(20);
@@ -55,12 +63,7 @@ public class PingPongFragment extends Fragment implements CompoundButton.OnCheck
 		durationPicker.setOnValueChangedListener(this);
 		durationPicker.setOnTouchListener(this);
 		
-		darkSwitch = ((Switch)rootView.findViewById(R.id.pingPongDarkSwitch));
-		darkSwitch.setChecked(dark);
-		darkSwitch.setOnCheckedChangeListener(this);
-		darkSwitch.setOnTouchListener(this);
-		
-		easingSpinner = ((Spinner)rootView.findViewById(R.id.pingPongEasingSpinner));
+		easingSpinner = ((Spinner)rootView.findViewById(R.id.breathingEasingSpinner));
 		easingSpinner.setAdapter(new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, Easing.values()));
 		easingSpinner.setSelection(easing);
 		easingSpinner.setOnItemSelectedListener(this);
@@ -72,7 +75,7 @@ public class PingPongFragment extends Fragment implements CompoundButton.OnCheck
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-			case R.id.pingPongSendButton:
+			case R.id.breathingSendButton:
 				activity.sendCommand(constructCommand());
 				break;
 		}
@@ -81,49 +84,33 @@ public class PingPongFragment extends Fragment implements CompoundButton.OnCheck
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		switch(buttonView.getId()) {
-			case R.id.pingPongSwitch:
+			case R.id.breathingSwitch:
 				active = isChecked;
 				break;
-			case R.id.pingPongDarkSwitch:
-				dark = isChecked;
-				break;
 		}
-	}
-	
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		switch(seekBar.getId()) {
-			case R.id.pingPongSpreadSeekbar:
-				spread = (byte) (progress+1);
-				break;
-		}
-	}
-	
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	
-	}
-	
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-	
 	}
 	
 	@Override
 	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-		switch (picker.getId()) {
-			case R.id.pingPongDurationPicker:
-				duration = (byte)newVal;
+		switch(picker.getId()) {
+			case R.id.breathingDurationPicker:
+				duration = (byte) newVal;
+				break;
+			case R.id.breathingMinIntensityPicker:
+				minIntensity = (byte) newVal;
+				break;
+			case R.id.breathingMaxIntensityPicker:
+				maxIntensity = (byte) newVal;
 				break;
 		}
 	}
 	
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			switch (parent.getId()) {
-				case R.id.pingPongEasingSpinner:
-					easing = ((Easing) parent.getItemAtPosition(position)).value;
-			}
+		switch (parent.getId()) {
+			case R.id.breathingEasingSpinner:
+				easing = ((Easing) parent.getItemAtPosition(position)).value;
+		}
 	}
 	
 	@Override
@@ -134,11 +121,13 @@ public class PingPongFragment extends Fragment implements CompoundButton.OnCheck
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
-//			case R.id.pingPongDarkSwitch:
+//			case R.id.breathingMinIntensityPicker:
 //				return !active;
-//			case R.id.pingPongSpreadSeekbar:
+//			case R.id.breathingMaxIntensityPicker:
 //				return !active;
-//			case R.id.pingPongDurationPicker:
+//			case R.id.breathingDurationPicker:
+//				return !active;
+//			case R.id.breathingEasingSpinner:
 //				return !active;
 			default:
 				return false;
@@ -146,22 +135,14 @@ public class PingPongFragment extends Fragment implements CompoundButton.OnCheck
 	}
 	
 	private byte[] constructCommand() {
-		int extraBytes = 0;
-		if (dark) {
-			extraBytes++;
-		}
-		byte[] command = new byte[5 + extraBytes];
+		byte[] command = new byte[6];
 		
-		command[0] = (byte) 'p';
+		command[0] = (byte) 'b';
 		command[1] = (byte) (active ? '+' : '-');
-		command[2] = spread;
-		command[3] = duration;
-		command[4] = easing;
-		
-		int optionByte = 5;
-		if (dark) {
-			command[optionByte++] = 'd';
-		}
+		command[2] = minIntensity;
+		command[3] = maxIntensity;
+		command[4] = duration;
+		command[5] = easing;
 		
 		return command;
 	}

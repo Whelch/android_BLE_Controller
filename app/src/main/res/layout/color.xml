@@ -3,6 +3,30 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+	<com.flask.colorpicker.ColorPickerView
+		android:id="@+id/colorPicker"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		alphaSlider="true"
+		density="12"
+		lightnessSlider="true"
+		wheelType="FLOWER"
+		lightnessSliderView="@id/colorLightnessSlider"
+		alphaSliderView="@+id/v_alpha_slider"
+		/>
+
+	<com.flask.colorpicker.slider.LightnessSlider
+		android:id="@+id/colorLightnessSlider"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		/>
+
+	<com.flask.colorpicker.slider.AlphaSlider
+		android:id="@+id/colorAlphaSlider"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		/>
+
     <Button
         android:id="@+id/button4"
         android:layout_width="match_parent"

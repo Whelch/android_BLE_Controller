@@ -6,14 +6,13 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/colorPrimary"
-	android:weightSum="4"
 	android:padding="10dp">
 
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1">
+		android:layout_marginBottom="10dp">
 
 		<Switch
 			android:id="@+id/rainbowSwitch"
@@ -25,128 +24,131 @@
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="vertical"
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
 		android:layout_weight="1">
 
 		<TextView
-			android:id="@+id/repeatText"
-			android:layout_width="match_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_gravity="center"
 			android:text="Repeat"/>
 
-		<SeekBar
-			android:id="@+id/rainbowRepeatSeekbar"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			style="@style/Widget.AppCompat.SeekBar.Discrete"
-			android:tickMark="@drawable/tickmark"
-			android:max="5"
-			android:progress="1"/>
-
 		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
+			android:orientation="vertical"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:weightSum="5">
+			android:layout_gravity="center"
+			android:layout_weight="1">
 
-			<TextView
-				android:layout_width="wrap_content"
+			<SeekBar
+				android:id="@+id/rainbowRepeatSeekbar"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text=".5"/>
+				style="@style/Widget.AppCompat.SeekBar.Discrete"
+				android:tickMark="@drawable/tickmark"
+				android:max="5"
+				android:progress="1"/>
 
-			<TextView
-				android:layout_width="wrap_content"
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
 				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="1"/>
+				android:weightSum="5">
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="2"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text=".5"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="3"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="1"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="4"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="2"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="5"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="3"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="4"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="5"/>
+			</LinearLayout>
 		</LinearLayout>
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
 		android:layout_weight="1">
 
 		<Switch
 			android:id="@+id/rainbowFlowSwitch"
-			android:layout_width="match_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Flow" />
+			android:layout_gravity="center"
+			android:text="Flow    " />
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
 		android:layout_weight="1">
 
 		<TextView
-			android:id="@+id/rainbowDurationText"
-			android:layout_width="match_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_gravity="center"
 			android:text="Duration" />
 
-		<SeekBar
-			android:id="@+id/rainbowDurationSeekBar"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content" />
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
+		<NumberPicker
+			android:id="@+id/rainbowDurationPicker"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:weightSum="1">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="1s"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="10s"/>
-		</LinearLayout>
+			android:layout_marginStart="10dp"/>
 	</LinearLayout>
 
 	<Button
 		android:id="@+id/rainbowSendButton"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_gravity="center"
+		android:paddingTop="20dp"
+		android:paddingBottom="20dp"
+		android:paddingStart="50dp"
+		android:paddingEnd="50dp"
 		android:text="Send"/>
 
 </LinearLayout>

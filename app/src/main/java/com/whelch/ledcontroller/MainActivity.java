@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,19 +25,6 @@ public class MainActivity extends FragmentActivity implements BluetoothLeUart.Ca
 
     // Bluetooth LE UART instance.  This is defined in BluetoothLeUart.java.
     private BluetoothLeUart uart;
-
-    // Write some text to the messages text view.
-    // Care is taken to do this on the main UI thread so writeLine can be called from any thread
-    // (like the BTLE callback).
-    private void writeLine(final CharSequence text) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                messages.append(text);
-//                messages.append("\n");
-//            }
-//        });
-    }
 
     // Handler for mouse click on the send button.
     public void sendClick(View view) {
@@ -107,7 +95,7 @@ public class MainActivity extends FragmentActivity implements BluetoothLeUart.Ca
     @Override
     protected void onResume() {
         super.onResume();
-        writeLine("Scanning for devices ...");
+        Log.d("Bluetooth", "Scanning for devices ...");
         uart.registerCallback(this);
         uart.connectFirstAvailable();
     }
@@ -124,36 +112,36 @@ public class MainActivity extends FragmentActivity implements BluetoothLeUart.Ca
     @Override
     public void onConnected(BluetoothLeUart uart) {
         // Called when UART device is connected and ready to send/receive data.
-        writeLine("Connected!");
+		Log.d("Bluetooth","Connected!");
     }
 
     @Override
     public void onConnectFailed(BluetoothLeUart uart) {
         // Called when some error occured which prevented UART connection from completing.
-        writeLine("Error connecting to device!");
+		Log.d("Bluetooth","Error connecting to device!");
     }
 
     @Override
     public void onDisconnected(BluetoothLeUart uart) {
         // Called when the UART device disconnected.
-        writeLine("Disconnected!");
+		Log.d("Bluetooth","Disconnected!");
     }
 
     @Override
     public void onReceive(BluetoothLeUart uart, BluetoothGattCharacteristic rx) {
         // Called when data is received by the UART.
-        writeLine("Received: " + rx.getStringValue(0));
+		Log.d("Bluetooth","Received: " + rx.getStringValue(0));
     }
 
     @Override
     public void onDeviceFound(BluetoothDevice device) {
         // Called when a UART device is discovered (after calling startScan).
-        writeLine("Found device : " + device.getAddress());
-        writeLine("Waiting for a connection ...");
+		Log.d("Bluetooth","Found device : " + device.getAddress());
+		Log.d("Bluetooth","Waiting for a connection ...");
     }
 
     @Override
     public void onDeviceInfoAvailable() {
-        writeLine(uart.getDeviceInfo());
+		Log.d("Bluetooth",uart.getDeviceInfo());
     }
 }

@@ -104,7 +104,10 @@ public class RainbowFragment extends Fragment implements View.OnClickListener, S
 	
 	@Override
 	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-		duration = (byte)newVal;
+		switch (picker.getId()) {
+			case R.id.rainbowDurationPicker:
+				duration = (byte) newVal;
+		}
 	}
 	
 	@Override

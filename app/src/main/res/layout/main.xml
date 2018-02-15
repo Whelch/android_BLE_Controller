@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorPrimary"
+	android:padding="10dp">
+
+	<Button
+		android:id="@+id/mainColorButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:paddingTop="20dp"
+		android:paddingBottom="20dp"
+		android:paddingStart="50dp"
+		android:paddingEnd="50dp"
+		android:layout_marginBottom="10dp"
+		android:text="Color"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_weight="1">
+
+			<Switch
+				android:id="@+id/mainLeftRailSwitch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Left Rail  "
+				android:layout_gravity="center"
+				android:layout_margin="10dp"
+				android:textSize="25sp"/>
+
+			<Switch
+				android:id="@+id/mainLeftPostSwitch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Left Post  "
+				android:layout_gravity="center"
+				android:layout_margin="10dp"
+				android:textSize="25sp"/>
+
+			<Button
+				android:id="@+id/mainAllOnButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:paddingTop="20dp"
+				android:paddingBottom="20dp"
+				android:paddingStart="50dp"
+				android:paddingEnd="50dp"
+				android:text="All On"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_gravity="center">
+
+			<Switch
+				android:id="@+id/mainRightRailSwitch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Right Rail  "
+				android:layout_gravity="center"
+				android:layout_margin="10dp"
+				android:textSize="25sp"/>
+
+			<Switch
+				android:id="@+id/mainRightPostSwitch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Right Post  "
+				android:layout_gravity="center"
+				android:layout_margin="10dp"
+				android:textSize="25sp"/>
+
+			<Button
+				android:id="@+id/mainAllOffButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:paddingTop="20dp"
+				android:paddingBottom="20dp"
+				android:paddingStart="50dp"
+				android:paddingEnd="50dp"
+				android:text="All Off"/>
+		</LinearLayout>
+	</LinearLayout>
+
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_gravity="center"
+		android:layout_weight="1">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Brightness" />
+
+		<NumberPicker
+			android:id="@+id/mainIntensityPicker"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"/>
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/mainSendButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_gravity="center"
+		android:paddingTop="20dp"
+		android:paddingBottom="20dp"
+		android:paddingStart="50dp"
+		android:paddingEnd="50dp"
+		android:text="Send"/>
+
+</LinearLayout>

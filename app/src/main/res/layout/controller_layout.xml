@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.view.ViewPager
+
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/pager"
+	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent" />
+	android:layout_height="match_parent"
+	android:background="@color/colorPrimary">
+
+
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/colorPrimaryDark">
+
+		<LinearLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:background="@color/colorPrimaryDark">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="20sp"
+			android:text="Connection Status:"/>
+
+		<TextView
+			android:id="@+id/connectionStatusText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="4dp"
+			android:textSize="20sp"
+			android:textColor="@color/disconnected"
+			android:text="Connected"/>
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/connectionRetryButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			android:layout_gravity="center"
+			android:paddingTop="20dp"
+			android:paddingBottom="20dp"
+			android:paddingStart="50dp"
+			android:paddingEnd="50dp"
+			android:text="Retry"/>
+
+	</LinearLayout>
+
+	<android.support.v4.view.ViewPager
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/pager"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+</LinearLayout>

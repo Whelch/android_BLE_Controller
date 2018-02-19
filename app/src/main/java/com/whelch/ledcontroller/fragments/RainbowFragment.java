@@ -3,27 +3,24 @@ package com.whelch.ledcontroller.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.whelch.ledcontroller.MainActivity;
 import com.whelch.ledcontroller.R;
+import com.whelch.ledcontroller.model.StateType;
+import com.whelch.ledcontroller.callbacks.RainbowCallback;
+import com.whelch.ledcontroller.model.RainbowState;
 
-public class RainbowFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, NumberPicker.OnValueChangeListener, View.OnTouchListener {
+public class RainbowFragment extends Fragment implements RainbowCallback, View.OnClickListener {
 
+	private Switch rainbowSwitch;
 	private Switch flowSwitch;
 	private SeekBar repeatSeekBar;
 	private NumberPicker durationPicker;
-	
-	private boolean active = false;
-	private byte repeat = 1;
-	private boolean flow = true;
-	private byte duration = 3;
 	
 	private MainActivity activity;
 	
@@ -32,29 +29,49 @@ public class RainbowFragment extends Fragment implements View.OnClickListener, S
 		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.rainbow, container, false);
 		activity = (MainActivity) getActivity();
 		
-		((Switch)rootView.findViewById(R.id.rainbowSwitch)).setOnCheckedChangeListener(this);
-		rootView.findViewById(R.id.rainbowSendButton).setOnClickListener(this);
+		rainbowSwitch = ((Switch)rootView.findViewById(R.id.rainbowSwitch));
 		
 		repeatSeekBar = ((SeekBar)rootView.findViewById(R.id.rainbowRepeatSeekbar));
-		repeatSeekBar.setProgress(repeat);
-		repeatSeekBar.setOnSeekBarChangeListener(this);
-		repeatSeekBar.setOnTouchListener(this);
 		
 		flowSwitch = ((Switch)rootView.findViewById(R.id.rainbowFlowSwitch));
-		flowSwitch.setChecked(flow);
-		flowSwitch.setOnCheckedChangeListener(this);
-		flowSwitch.setOnTouchListener(this);
 		
 		durationPicker = (NumberPicker) rootView.findViewById(R.id.rainbowDurationPicker);
 		durationPicker.setFormatter(value -> value + "s");
 		durationPicker.setMinValue(1);
 		durationPicker.setMaxValue(20);
-		durationPicker.setValue(duration);
 		durationPicker.setWrapSelectorWheel(false);
-		durationPicker.setOnValueChangedListener(this);
-		durationPicker.setOnTouchListener(this);
+		
+		rootView.findViewById(R.id.rainbowSendButton).setOnClickListener(this);
 		
 		return rootView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		onChange((RainbowState) activity.registerCallback(StateType.rainbow, this));
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		activity.unregisterCallback(StateType.rainbow, this);
+	}
+	
+	@Override
+	public void onChange(RainbowState state) {
+		if (state.active != rainbowSwitch.isChecked()) {
+			rainbowSwitch.setChecked(state.active);
+		}
+		if (state.repeat != repeatSeekBar.getProgress()) {
+			repeatSeekBar.setProgress(state.repeat);
+		}
+		if(state.flow != flowSwitch.isChecked()) {
+			flowSwitch.setChecked(state.flow);
+		}
+		if (state.flow && state.duration != durationPicker.getValue()) {
+			durationPicker.setValue(state.duration);
+		}
 	}
 	
 	@Override
@@ -66,71 +83,13 @@ public class RainbowFragment extends Fragment implements View.OnClickListener, S
 		}
 	}
 	
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		switch(buttonView.getId()) {
-			case R.id.rainbowSwitch:
-				active = isChecked;
-				break;
-			case R.id.rainbowFlowSwitch:
-				flow = isChecked;
-				if (isChecked) {
-					duration = (byte)durationPicker.getValue();
-				} else {
-					duration = 0;
-				}
-				break;
-		}
-	}
-	
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		switch(seekBar.getId()) {
-			case R.id.rainbowRepeatSeekbar:
-				repeat = (byte) progress;
-				break;
-		}
-	}
-	
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	
-	}
-	
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-	
-	}
-	
-	@Override
-	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-		switch (picker.getId()) {
-			case R.id.rainbowDurationPicker:
-				duration = (byte) newVal;
-		}
-	}
-	
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		switch (v.getId()) {
-//			case R.id.rainbowFlowSwitch:
-//				return !active;
-//			case R.id.rainbowRepeatSeekbar:
-//				return !active;
-//			case R.id.rainbowDurationPicker:
-//				return !(active && flow);
-			default:
-				return false;
-		}
-	}
-	
-	private byte[] constructCommand() {
+	public byte[] constructCommand() {
 		byte[] command = new byte[4];
 		
 		command[0] = (byte) 'r';
-		command[1] = (byte) (active ? '+' : '-');
-		command[2] = repeat;
-		command[3] = duration;
+		command[1] = (byte) (rainbowSwitch.isChecked() ? '+' : '-');
+		command[2] = (byte) repeatSeekBar.getProgress();
+		command[3] = (byte) (flowSwitch.isChecked() ? durationPicker.getValue() : 0);
 		
 		return command;
 	}

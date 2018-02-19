@@ -13,10 +13,14 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.whelch.ledcontroller.MainActivity;
 import com.whelch.ledcontroller.R;
+import com.whelch.ledcontroller.callbacks.StripCallback;
+import com.whelch.ledcontroller.model.BreathingState;
+import com.whelch.ledcontroller.model.StateType;
+import com.whelch.ledcontroller.model.StripState;
 
 import java.nio.ByteBuffer;
 
-public class MainFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, NumberPicker.OnValueChangeListener {
+public class MainFragment extends Fragment implements StripCallback, View.OnClickListener, CompoundButton.OnCheckedChangeListener, NumberPicker.OnValueChangeListener {
 	
 	private Switch leftRailSwitch;
 	private Switch leftPostSwitch;
@@ -60,6 +64,42 @@ public class MainFragment extends Fragment implements View.OnClickListener, Comp
 		intensityNumberPicker.setOnValueChangedListener(this);
 		
 		return rootView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		onChange((StripState) activity.registerCallback(StateType.strip, this));
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		activity.unregisterCallback(StateType.strip, this);
+	}
+	
+	@Override
+	public void onChange(StripState state) {
+		if (state.leftPost != leftPostSwitch.isChecked()) {
+			leftPostSwitch.setOnCheckedChangeListener(null);
+			leftPostSwitch.setChecked(state.leftPost);
+			leftPostSwitch.setOnCheckedChangeListener(this);
+		}
+		if (state.leftRail != leftRailSwitch.isChecked()) {
+			leftRailSwitch.setOnCheckedChangeListener(null);
+			leftRailSwitch.setChecked(state.leftRail);
+			leftRailSwitch.setOnCheckedChangeListener(this);
+		}
+		if (state.rightPost != rightPostSwitch.isChecked()) {
+			rightPostSwitch.setOnCheckedChangeListener(null);
+			rightPostSwitch.setChecked(state.rightPost);
+			rightPostSwitch.setOnCheckedChangeListener(this);
+		}
+		if (state.rightRail != rightRailSwitch.isChecked()) {
+			rightRailSwitch.setOnCheckedChangeListener(null);
+			rightRailSwitch.setChecked(state.rightRail);
+			rightRailSwitch.setOnCheckedChangeListener(this);
+		}
 	}
 	
 	@Override
@@ -121,16 +161,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, Comp
 		command[0] = (byte) 't';
 		
 		switch(buttonView.getId()) {
-			case R.id.mainLeftRailSwitch:
+			case R.id.mainLeftPostSwitch:
 				command[1] = 0;
 				break;
-			case R.id.mainLeftPostSwitch:
+			case R.id.mainLeftRailSwitch:
 				command[1] = 1;
 				break;
-			case R.id.mainRightRailSwitch:
+			case R.id.mainRightPostSwitch:
 				command[1] = 2;
 				break;
-			case R.id.mainRightPostSwitch:
+			case R.id.mainRightRailSwitch:
 				command[1] = 3;
 				break;
 		}

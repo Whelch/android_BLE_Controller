@@ -12,6 +12,16 @@ public enum Easing {
 		value = val;
 	}
 	
+	public static Easing fromByte(byte val) {
+		switch(val) {
+			case 0: return linear;
+			case 1: return sinusoidal;
+			case 2: return exponential;
+			case 3: return quartic;
+			default: return linear;
+		}
+	}
+	
 	@Override
 	public String toString() {
 		switch(value) {

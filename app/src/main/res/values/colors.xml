@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="colorPrimary">#000</color>
-	<color name="colorPrimaryDark">#555</color>
+	<color name="colorPrimaryDark">#333</color>
 	<color name="colorAccent">#700000</color>
+
+	<color name="connected">#007f00</color>
+	<color name="disconnected">#be0000</color>
+	<color name="searching">#00afc8</color>
+
 </resources>
